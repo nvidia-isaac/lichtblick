@@ -7,7 +7,7 @@
 
 import { Sockets } from "@foxglove/electron-socket/renderer";
 import { RosNode, TcpSocket } from "@foxglove/ros1";
-import { Time, fromMillis, isGreaterThan, toSec } from "@foxglove/rostime";
+import { Time, fromMillis, isGreaterThan, toSec } from "@lichtblick/rostime";
 import { HttpServer } from "@foxglove/xmlrpc";
 import * as _ from "lodash-es";
 import { v4 as uuidv4 } from "uuid";
