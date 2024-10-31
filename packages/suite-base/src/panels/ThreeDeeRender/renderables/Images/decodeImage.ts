@@ -23,7 +23,7 @@ import * as _ from "lodash-es";
 
 import { RawImage } from "@foxglove/schemas";
 
-import { CompressedImageTypes, CompressedVideo } from "./ImageTypes";
+import { CompressedImageTypes, getTimestampFromImage } from "./ImageTypes";
 import { Image as RosImage } from "../../ros";
 import { ColorModeSettings, getColorConverter } from "../colorMode";
 
@@ -35,7 +35,7 @@ export async function decodeCompressedImageToBitmap(
   return await createImageBitmap(bitmapData, { resizeWidth });
 }
 
-export function isVideoKeyframe(frameMsg: CompressedVideo): boolean {
+export function isVideoKeyframe(frameMsg: CompressedImageTypes): boolean {
   switch (frameMsg.format) {
     case "h264": {
       // Search for an IDR NAL unit to determine if this is a keyframe
@@ -45,7 +45,7 @@ export function isVideoKeyframe(frameMsg: CompressedVideo): boolean {
   return false;
 }
 
-export function getVideoDecoderConfig(frameMsg: CompressedVideo): VideoDecoderConfig | undefined {
+export function getVideoDecoderConfig(frameMsg: CompressedImageTypes): VideoDecoderConfig | undefined {
   switch (frameMsg.format) {
     case "h264": {
       const decoderConfig = H264.ParseDecoderConfig(frameMsg.data);
@@ -64,7 +64,7 @@ export function getVideoDecoderConfig(frameMsg: CompressedVideo): VideoDecoderCo
 }
 
 export async function decodeCompressedVideoToBitmap(
-  frameMsg: CompressedVideo,
+  frameMsg: CompressedImageTypes,
   videoPlayer: VideoPlayer,
   firstMessageTime: bigint,
   resizeWidth?: number,
@@ -75,7 +75,7 @@ export async function decodeCompressedVideoToBitmap(
 
   // Get the timestamp of this frame as microseconds relative to the first frame
   const firstTimestampMicros = Number(firstMessageTime / 1000n);
-  const timestampMicros = toMicroSec(frameMsg.timestamp) - firstTimestampMicros;
+  const timestampMicros = toMicroSec(getTimestampFromImage(frameMsg)) - firstTimestampMicros;
 
   const videoFrame = await videoPlayer.decode(
     frameMsg.data,
