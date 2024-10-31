@@ -23,7 +23,7 @@ import * as _ from "lodash-es";
 
 import { RawImage } from "@foxglove/schemas";
 
-import { CompressedImageTypes, CompressedImage } from "./ImageTypes";
+import { CompressedImageTypes } from "./ImageTypes";
 import { Image as RosImage } from "../../ros";
 import { ColorModeSettings, getColorConverter } from "../colorMode";
 
@@ -35,7 +35,7 @@ export async function decodeCompressedImageToBitmap(
   return await createImageBitmap(bitmapData, { resizeWidth });
 }
 
-export function isVideoKeyframe(frameMsg: CompressedImage): boolean {
+export function isVideoKeyframe(frameMsg: CompressedImageTypes): boolean {
   switch (frameMsg.format) {
     case "h264": {
       // Search for an IDR NAL unit to determine if this is a keyframe
@@ -45,7 +45,7 @@ export function isVideoKeyframe(frameMsg: CompressedImage): boolean {
   return false;
 }
 
-export function getVideoDecoderConfig(frameMsg: CompressedImage): VideoDecoderConfig | undefined {
+export function getVideoDecoderConfig(frameMsg: CompressedImageTypes): VideoDecoderConfig | undefined {
   switch (frameMsg.format) {
     case "h264": {
       const decoderConfig = H264.ParseDecoderConfig(frameMsg.data);
@@ -64,7 +64,7 @@ export function getVideoDecoderConfig(frameMsg: CompressedImage): VideoDecoderCo
 }
 
 export async function decodeCompressedVideoToBitmap(
-  frameMsg: CompressedImage,
+  frameMsg: CompressedImageTypes,
   videoPlayer: VideoPlayer,
   firstMessageTime: bigint,
   resizeWidth?: number,
