@@ -23,7 +23,7 @@ import * as _ from "lodash-es";
 
 import { RawImage } from "@foxglove/schemas";
 
-import { CompressedImageTypes } from "./ImageTypes";
+import { CompressedImageTypes, getTimestampFromImage } from "./ImageTypes";
 import { Image as RosImage } from "../../ros";
 import { ColorModeSettings, getColorConverter } from "../colorMode";
 
@@ -75,7 +75,7 @@ export async function decodeCompressedVideoToBitmap(
 
   // Get the timestamp of this frame as microseconds relative to the first frame
   const firstTimestampMicros = Number(firstMessageTime / 1000n);
-  const timestampMicros = toMicroSec(frameMsg.timestamp) - firstTimestampMicros;
+  const timestampMicros = toMicroSec(getTimestampFromImage(frameMsg)) - firstTimestampMicros;
 
   const videoFrame = await videoPlayer.decode(
     frameMsg.data,
