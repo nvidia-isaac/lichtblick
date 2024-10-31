@@ -23,7 +23,7 @@ import * as _ from "lodash-es";
 
 import { RawImage } from "@foxglove/schemas";
 
-import { CompressedImageTypes } from "./ImageTypes";
+import { CompressedImageTypes, CompressedImage } from "./ImageTypes";
 import { Image as RosImage } from "../../ros";
 import { ColorModeSettings, getColorConverter } from "../colorMode";
 

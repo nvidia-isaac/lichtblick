@@ -17,7 +17,7 @@ import { assert } from "ts-essentials";
 
 import { toNanoSec } from "@foxglove/rostime";
 
-import { AnyImage } from "./ImageTypes";
+import { AnyImage, CompressedImage } from "./ImageTypes";
 import {
   decodeCompressedImageToBitmap,
   decodeCompressedVideoToBitmap,
